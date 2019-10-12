@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1569245942 source:d:\myfiles\c++\数据结构\堆栈\main.cpp
+	<iostream>
+	<stack>
+	"string"
+	<iostream>
+	<stack>
+	<string>
+	<iostream>
+	<stack>
+	"string"
+	<iostream>
+	<iomanip>
+	<stack>
+	<queue>
+	<iostream>
+	<stack>
+

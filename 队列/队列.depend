@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1570589771 source:d:\myfiles\c++\数据结构\队列\main.cpp
+	<iostream>
+	<queue>
+	<string>
+	<map>
+
