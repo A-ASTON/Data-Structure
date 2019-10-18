@@ -1,4 +1,4 @@
-/*KMPÀ„∑®
+
 #include <iostream>
 #include <string>
 using namespace std;
@@ -7,7 +7,7 @@ class myString
 {
 private:
     string mainstr;
-    int size;
+    int Size;
 
     void GetNext(string p, int next[]);
     int KMPFind(string p, int pos, int next[]);
@@ -15,19 +15,20 @@ private:
 public:
     myString();
     ~myString();
+    myString(string s) {Size = s.length(); mainstr = s;}
     void SetVal(string sp);
     int KMPFindSubstr(string p, int pos);
 };
 
 myString::myString()
 {
-    size = 0;
+    Size = 0;
     mainstr = "";
 }
 
 myString::~myString()
 {
-    size = 0;
+    Size = 0;
     mainstr = "";
 }
 
@@ -35,32 +36,31 @@ void myString::SetVal(string sp)
 {
     mainstr = "";
     mainstr.assign(sp);
-    size = mainstr.length();
+    Size = mainstr.length();
 }
 
 int myString::KMPFindSubstr(string p, int pos)
 {
     int i;
     int L = p.length();
-    int *next = new int[L+1];
+    int *next = new int[L];
     GetNext(p, next);
     for(i = 0; i<L; i++)
         cout<<next[i]<<' ';
     cout<<endl;
     int v = -1;
     v = KMPFind(p, pos, next);
-    delete []next;
-
+    delete[] next;
     return v;
 }
 
 void myString::GetNext(string p, int next[])
 {
-    int k = 1; next[1] = 0;
-    int j = 0;
-    while(k < size)
+    int j = -1, k = 0;
+    next[0] = -1;
+    while(k < Size - 1)
     {
-        if(j == 0 || p[k] == p[j])
+        if(j == -1 || p[k] == p[j])
         {
             ++k;
             ++j;
@@ -72,16 +72,25 @@ void myString::GetNext(string p, int next[])
 
 int myString::KMPFind(string p, int pos, int next[])
 {
-    int l = 1;
-    while(pos <= size && l<=p.length())
+    int i = pos, j = -1;
+    while(i < (int)Size && j < (int)p.length())
     {
-        if(l == 0 || mainstr[pos] == p[l]) { ++pos; ++l;}
-        else l = next[l];
+        if(j == -1 || p[j] == mainstr[i])
+        {
+            j++;
+            i++;
+        }
+        else j = next[j];
     }
-    if(l > p.length()) return pos - p.length();
-    else return -1;
+    if(j == (int)p.length())
+    {
+        return i - j;
+    }
+    else
+    {
+        return -1;
+    }
 }
-
 
 
 int main()
@@ -90,17 +99,18 @@ int main()
     cin>>t;
     while(t--)
     {
-        string main_string, mode_string;
-        cin>>main_string>>mode_string;
-        myString mStr;
-        mStr.SetVal(main_string);
+        string main_string;
+        cin>>main_string;
+        myString mStr(main_string);
+        string mode_string;
+        cin>>mode_string;
         int result = mStr.KMPFindSubstr(mode_string, 0);
         if(result == -1) cout<<0<<endl;
-        else cout<<result<<endl;
+        else cout<<result+1<<endl;
     }
     return 0;
 }
-*/
+
 /*ÃÊªª¥Æ
 #include <iostream>
 #include <string>
