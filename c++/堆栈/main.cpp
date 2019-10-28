@@ -374,7 +374,7 @@ int main()
     return 0;
 }
 */
-/*排队游戏*/
+/*排队游戏
 #include <iostream>
 #include <string>
 #include <stack>
@@ -397,4 +397,181 @@ int main()
         }
         else boys.push(i);
     }
+}
+*/
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+#define ERROR -1
+#define CORRECT 1
+
+
+//定义一个堆栈结构，其存储结构包含栈底指针base和栈顶指针top
+#define MAXSTACKSIZE 100     //栈存储空间最大长度
+
+typedef struct Sqstack{
+ char base[MAXSTACKSIZE];           //栈底指针，也是栈的基址
+ char *top;                       //栈顶指针
+}Sqstack;
+
+
+
+int InitStack(Sqstack *S);
+int Push(Sqstack *S,char e);
+int Pop(Sqstack *S,char *e);
+int Stackempty(Sqstack *S);
+int MatchBracket(Sqstack *S,char *BracketString);
+
+
+
+//主函数
+int main()
+{
+
+ int i,SampleNum;
+ Sqstack MBStack;
+ char BracketString[MAXSTACKSIZE];
+ char e;
+
+ Push(&MBStack, 'a');
+ Pop(&MBStack, &e);
+ cout<<e<<endl;
+
+ cout<<"请输入样本数目:";
+
+ cin>>SampleNum;       //输入样本数目
+
+ for(i=0;i<SampleNum;i++)
+ {
+  cout<<"请输入样本数据:";
+  cin>>BracketString;              //输入样本数据（一行字符串）
+
+  int a=MatchBracket(&MBStack,BracketString);
+
+  cout<<a<<endl;
+
+ }
+    return 0;
+}
+
+
+
+//初始化堆栈
+//如果栈不存在base=NULL，则返回错误ERROR
+//将栈顶指针top指向栈底base
+//返回CORRECT
+int InitStack(Sqstack *S)
+{
+ if(S->base==NULL)
+  return (ERROR);
+
+
+ S->top=S->base;            //初始化堆栈
+
+ return (CORRECT);
+
+}
+
+
+
+//进栈
+//如果栈顶top超出范围，返回ERROR
+//将新数据e插入栈顶指定位置top上
+//栈顶指针top加1
+//返回CORRECT
+int Push(Sqstack *S,char e)
+{
+ if((S->top-S->base)>=MAXSTACKSIZE)
+  return(ERROR);
+
+ *S->top=e;       //插入
+
+ S->top=S->top+1;      //加一
+
+
+ return(CORRECT);
+
+
+}
+
+
+
+//出栈
+//如果栈为空，则返回ERROR
+//栈顶指针top指向上一个位置，取一个数据，并放入变量e中
+//返回CORRECT
+int Pop(Sqstack *S,char *e)
+{
+ if(S->top<=S->base)
+  return(ERROR);
+
+ S->top=S->top-1;          //减一
+
+ *e=*S->top;            //取值
+
+
+ return(CORRECT);
+}
+
+
+
+//判断栈空
+//如果栈为空，返回ERROR
+//否则返回CORRECT
+int Stackempty(Sqstack *S)
+{
+ if(S->top<=S->base)
+  return(ERROR);
+
+ return(CORRECT);
+}
+
+
+
+
+
+//括号匹配
+//若算术表达式扫描完成，此时如果栈空，则正确返回（0）；如果栈未空，说明左括号多于右括号，返回（-3）
+//从算术表达式中取出一个字符，如果是左括号（‘（’或‘【’或‘{’），则让该括号进栈（PUSH）
+//如果是右括号（‘）’或‘】’或‘}’）
+//（1）如果栈为空，则说明右括号多于左括号，返回（-2）
+//（2）如果栈不为空，则从栈顶弹出（POP）一个括号；若括号匹配，则转1继续进行判断；否则，说明左右括号配对
+//次序不正确，返回（-1）
+int MatchBracket(Sqstack *S,char *BracketString)
+{
+ int i;
+ char C,*sC;
+ sC = NULL;
+ InitStack(S);              //清空堆栈
+ for(i=0;i<strlen(BracketString);i++)
+ {
+  C=BracketString[i];
+
+  if( ( C=='(' ) || ( C=='[' ) || ( C=='{' ) )
+   Push(S,C);
+
+  if( ( C==')' ) || ( C==']' ) || ( C=='}' ) )
+  {
+   if(Stackempty(S)==ERROR)
+    return(-2);
+
+   Pop(S,sC);
+
+   if( ( C==')' ) && ( *sC != '(' ) )
+    return(-1);
+
+   if( ( C==']' ) && ( *sC!= '[' ) )
+    return(-1);
+
+   if( ( C=='}' ) && ( *sC!= '{' ) )
+    return(-1);
+  }
+ }
+
+ if(Stackempty(S)!=ERROR)
+  return(-3);
+
+ return(0);
+
 }
